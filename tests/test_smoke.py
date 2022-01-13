@@ -68,3 +68,41 @@ def test_view_in_cart(web_browser):
     with allure.step("сравниваем количество товаров в корзине"):
         assert page.item_cart.count() == 1
 
+
+@pytest.mark.smoke
+def test_open_catalog(web_browser):
+    """Прокликиваем Марки на главной странице."""
+
+    with allure.step('Переходим на главную страницу'):
+        page = MainPage(web_browser)
+
+    cat_list = [(page.chery.click, 'Chery'),
+                (page.geely.click, 'Geely'),
+                (page.great_wall.click, 'Great Wall'),
+                (page.haval.click, 'Haval'),
+                (page.lifan.click, 'Lifan'),
+                (page.vortex.click, 'Vortex'),
+                (page.byd.click, 'Byd'),
+                (page.changan.click, 'Changan'),
+                (page.brilliance.click, 'Brilliance'),
+                (page.faw.click, 'Faw'),
+                (page.dfm.click, 'Dongfeng'),
+                (page.foton.click, 'Foton'),
+                (page.howo.click, 'Howo'),
+                (page.shacman.click, 'Shacman'),
+                ]
+
+    for click, name in cat_list:
+        with allure.step(f'Нажимаем на {name}'):
+            click()
+
+        with allure.step(f'Проверяем, что в заголовке h1 содержится "{name}"'):
+            assert name in page.category_name.get_text()
+
+        with allure.step(f'Проверяем, что в названии страницы есть "{name}"'):
+            assert name in page.get_title()
+
+        with allure.step('нажимаем назад'):
+            page.go_back()
+
+
