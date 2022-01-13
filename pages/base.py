@@ -31,14 +31,6 @@ class WebPage:
         self._web_driver = web_driver
         self.get(url)
 
-        # note старый вариант подгрузки куки
-        # if load_cookies:
-        #     cookies = read_cookies()
-        #     if cookies != []:
-        #         self.add_cookie(cookies)
-        #     else:
-        #         write_cookies(self.get_cookies())
-
     def __setattr__(self, name, value):
         if not name.startswith('_'):
             self.__getattribute__(name)._set_value(self._web_driver, value)
@@ -62,6 +54,9 @@ class WebPage:
             self._web_driver.add_cookie(cookie)
         if refresh:
             self._web_driver.refresh()
+
+    def get_title(self):
+        return self._web_driver.title
 
     def get(self, url):
         self._web_driver.get(url)
