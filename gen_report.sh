@@ -1,7 +1,5 @@
 #!/bin/bash
-echo "clear dir report"
-rm -rf ./allure-reports
-echo "generate report"
+rm -rf ./allure-reports/*
 allure generate --clean -o allure-reports/
 zip -r ./report.zip ./allure-reports/*
 sudo lsof -t -i tcp:8000 | xargs kill -9
