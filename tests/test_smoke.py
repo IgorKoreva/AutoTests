@@ -8,7 +8,7 @@ from pages.relines import MainPage
 
 
 @allure.severity(allure.severity_level.BLOCKER)
-@allure.story('Смоки-хуеки первый тест')
+@allure.story('Тестирование поиска')
 @pytest.mark.smoke
 @pytest.mark.parametrize('search, result', (
         ('Chery Fora Мотор стеклоочистителя', 2),
@@ -30,8 +30,8 @@ def test_check_main_search(search, result, web_browser):
         assert page.products_titles.count() == result
 
 
-@allure.story('Смоки-хуеки второй тест')
-@pytest.mark.smoke
+@allure.story('Тестирование корзины')
+@pytest.mark.acceptance
 def test_put_in_cart(web_browser):
     """Добавляем один элемент в корзину."""
 
@@ -52,9 +52,9 @@ def test_put_in_cart(web_browser):
         write_cookies(page.get_cookies())
 
 
-@allure.feature('фича-хуича')
-@allure.story('Смоки-хуеки третий тест')
-@pytest.mark.smoke
+
+@allure.story('Тестирование корзины')
+@pytest.mark.acceptance
 def test_view_in_cart(web_browser):
     """Подкладываем куку и проверяем что есть 1 элемент в корзине."""
 
@@ -69,6 +69,8 @@ def test_view_in_cart(web_browser):
         assert page.item_cart.count() == 1
 
 
+@allure.feature('Другие')
+@allure.story('Тестирование марок автомобилей')
 @pytest.mark.smoke
 def test_open_catalog(web_browser):
     """Прокликиваем Марки на главной странице."""
@@ -104,5 +106,3 @@ def test_open_catalog(web_browser):
 
         with allure.step('нажимаем назад'):
             page.go_back()
-
-
