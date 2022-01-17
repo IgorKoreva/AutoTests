@@ -32,5 +32,5 @@ class MainPage(WebPage):
     item_cart = ManyWebElements(xpath='//*[@id="root"]/section/section/div/main/ul/li/section/a')
 
     # note: category
-    main_categories = ManyWebElements(xpath='//*[@id="root"]/section/section/main/section/div[2]/*/a')
-    name_category_h1 = WebElement(xpath='//*[@id="root"]/section/section/main/section[1]/section[2]/header/h1')
+    main_categories = ManyWebElements(xpath='//a[@class="main-page-group__link"]')
+    name_category_h1 = WebElement(xpath='//h1[@class="catalog-header__title"]')
