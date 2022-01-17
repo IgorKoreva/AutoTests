@@ -23,11 +23,11 @@ def test_check_main_search(search, result, web_browser):
     with allure.step(f'Вводим в поисковую строку "{search}"'):
         page.search = search
     with allure.step('Нажимаем кнопку "поиск"'):
-        page.search_run_button.click()
+        page.search_button.click()
 
     # Verify that user can see the list of products:
     with allure.step(f'проверяем что элементов "{result}"'):
-        assert page.products_titles.count() == result
+        assert page.products_list.count() == result
 
 
 @allure.story('Тестирование корзины')
@@ -40,7 +40,7 @@ def test_put_in_cart(web_browser):
         page = MainPage(web_browser, url=url)
 
     with allure.step('Нажимаем кнопку купить'):
-        page.pay.click()
+        page.buy.click()
 
     with allure.step('Переходим в корзину'):
         page.cart.click()
@@ -78,16 +78,16 @@ def test_open_catalog(web_browser):
     with allure.step('Переходим на главную страницу'):
         page = MainPage(web_browser)
 
-    for cat in page.main_categories:
-        group_name = cat.accessible_name
-        with allure.step(f'Нажимаем на {group_name}'):
-            cat.click()
+    for brand in page.car_brands:
+        name = brand.accessible_name
+        with allure.step(f'Нажимаем на {name}'):
+            brand.click()
 
-        with allure.step(f'Проверяем, что в заголовке h1 содержится "{group_name}"'):
-            assert group_name in page.name_category_h1.get_text()
+        with allure.step(f'Проверяем, что в заголовке h1 содержится "{name}"'):
+            assert name in page.brand_name_h1.get_text()
 
-        with allure.step(f'Проверяем, что в названии страницы есть "{group_name}"'):
-            assert group_name in page.get_title()
+        with allure.step(f'Проверяем, что в названии страницы есть "{name}"'):
+            assert name in page.get_title()
 
         with allure.step('нажимаем назад'):
             page.go_back()
