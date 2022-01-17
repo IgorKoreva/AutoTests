@@ -78,7 +78,7 @@ def test_open_catalog(web_browser):
     with allure.step('Переходим на главную страницу'):
         page = MainPage(web_browser)
 
-    for cat in page.main_categorys:
+    for cat in page.main_categories:
         group_name = cat.accessible_name
         with allure.step(f'Нажимаем на {group_name}'):
             cat.click()
