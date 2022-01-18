@@ -12,6 +12,21 @@ import uuid
 from allure_commons.types import AttachmentType
 
 
+def pytest_make_parametrize_id(config, val):
+    """Для поддержки кириллицы в тестах."""
+    return repr(val)
+
+
+def pytest_addoption(parser):
+    """Параметры."""
+    parser.addoption("--site", action="store", default='https://relines.ru/', type=str, help="site, http://127.0.0.1/")
+
+
+@pytest.fixture
+def site_value(request):
+    return request.config.getoption("--site")
+
+
 @pytest.fixture
 def chrome_options(chrome_options):
     # chrome_options.binary_location = '/usr/bin/google-chrome-stable'
