@@ -14,11 +14,11 @@ from pages.relines import MainPage
         ('Chery Fora Мотор стеклоочистителя', 2),
         ('Chery Fora Мотор стеклооddsadsasdчистителя', 0),
 ))
-def test_check_main_search(search, result, web_browser):
+def test_check_main_search(search, result, web_browser, site_value):
     """Проверяем поиск на главной странице."""
 
     with allure.step("Открываем главную страницу"):
-        page = MainPage(web_browser)
+        page = MainPage(web_browser, site_value)
 
     with allure.step(f'Вводим в поисковую строку "{search}"'):
         page.search = search
@@ -32,12 +32,12 @@ def test_check_main_search(search, result, web_browser):
 
 @allure.story('Тестирование корзины')
 @pytest.mark.acceptance
-def test_put_in_cart(web_browser):
+def test_put_in_cart(web_browser, site_value):
     """Добавляем один элемент в корзину."""
 
-    url = 'https://relines.ru/product/bolt-hexagon-flange-emvrq'
-    with allure.step(f'Открываем страницу с товаром {url}'):
-        page = MainPage(web_browser, url=url)
+    url = 'product/bolt-hexagon-flange-emvrq'
+    with allure.step(f'Открываем страницу с товаром {site_value + url}'):
+        page = MainPage(web_browser, site_value, url=url)
 
     with allure.step('Нажимаем кнопку купить'):
         page.buy.click()
@@ -55,12 +55,12 @@ def test_put_in_cart(web_browser):
 
 @allure.story('Тестирование корзины')
 @pytest.mark.acceptance
-def test_view_in_cart(web_browser):
+def test_view_in_cart(web_browser, site_value):
     """Подкладываем куку и проверяем что есть 1 элемент в корзине."""
 
-    url = 'https://relines.ru/cart'
-    with allure.step(f"открываем страницу {url}"):
-        page = MainPage(web_browser, url=url)
+    url = 'cart'
+    with allure.step(f"открываем страницу {site_value + url}"):
+        page = MainPage(web_browser, site_value, url=url)
 
     with allure.step('загружаем куку и обновляем страницу'):
         page.add_cookie(read_cookies(), refresh=True)
@@ -72,11 +72,11 @@ def test_view_in_cart(web_browser):
 @allure.feature('Другие')
 @allure.story('Тестирование марок автомобилей')
 @pytest.mark.smoke
-def test_open_catalog(web_browser):
+def test_open_catalog(web_browser, site_value):
     """Прокликиваем Марки на главной странице."""
 
     with allure.step('Переходим на главную страницу'):
-        page = MainPage(web_browser)
+        page = MainPage(web_browser, site_value)
 
     for brand in page.car_brands:
         name = brand.accessible_name

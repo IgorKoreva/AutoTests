@@ -27,9 +27,9 @@ class WebPage:
 
     _web_driver = None
 
-    def __init__(self, web_driver, url=''):
+    def __init__(self, web_driver, site_value, url=''):
         self._web_driver = web_driver
-        self.get(url)
+        self.get(site_value + url)
 
     def __setattr__(self, name, value):
         if not name.startswith('_'):

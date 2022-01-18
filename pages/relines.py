@@ -1,8 +1,5 @@
 #!/usr/bin/python3
 # -*- encoding=utf8 -*-
-import json
-import os
-
 from pages.base import WebPage
 from pages.elements import WebElement
 from pages.elements import ManyWebElements
@@ -10,11 +7,9 @@ from pages.elements import ManyWebElements
 
 class MainPage(WebPage):
 
-    def __init__(self, web_driver, url=''):
-        if not url:
-            url = os.getenv("MAIN_URL") or 'https://relines.ru/'
+    def __init__(self, web_driver, site_value, url=''):
 
-        super().__init__(web_driver, url)
+        super().__init__(web_driver, site_value, url)
 
     # note main page
     search = WebElement(id='query')
