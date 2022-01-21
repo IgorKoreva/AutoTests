@@ -1,9 +1,9 @@
-*.json
+cookies.json
 *.png
 *.zip
 chromedriver
 venv/
 .pytest_cache/
-allure-reports/
-allure-results/
-screenshots/
+allure-reports/*
+allure-results/*.json
+screenshots/*.png
