@@ -40,11 +40,12 @@ class MainPage(WebPage):
 
     car_brands = ManyWebElements(xpath='//a[@class="main-page-group__link"]')
     brand_name_h1 = WebElement(xpath='//h1[@class="catalog-header__title"]')
-    elements = ManyWebElements(xpath='//a[contains(@class, "link header-nav__link") or '
-                                     'contains(@class, "header__logo") or '
-                                     'contains(@class, "link footer__menu-link") or '
-                                     'contains(@class, "link footer-messengers__messenger") or '
-                                     'contains(@class, "link header__phone")]')
+    elements = ManyWebElements(xpath='//a[contains(@class, "link header-nav__link") or ' \
+                                     'contains(@class, "header__logo") or ' \
+                                     'contains(@class, "link footer__menu-link") or ' \
+                                     'contains(@class, "link footer-messengers__messenger") or ' \
+                                     'contains(@class, "link header__phone") and ' \
+                                     '@class!="link header__phone-mobile hidden-md hidden-lg"]')
 
     # note cart
     item_cart = ManyWebElements(xpath='//*[@id="root"]/section/section/div/main/ul/li/section/a')
