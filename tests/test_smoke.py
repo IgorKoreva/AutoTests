@@ -2,7 +2,6 @@
 import allure
 import pytest
 
-from pages.base import write_cookies, read_cookies
 from pages.relines import MainPage, get_test_data, CartPage
 
 
@@ -13,14 +12,10 @@ from pages.relines import MainPage, get_test_data, CartPage
         ('normal_search'),
         ('bad_search'),
 ))
-def test_check_main_search(case, web_browser, site_value):
+def test_check_main_search(case, web_browser, site_value, check_data_case):
     """Проверяем поиск на главной странице."""
 
-    data = get_test_data(site_value, case)
-    if data is None:
-        pytest.xfail(reason='Кейса не существует, пропускаем')
-        assert False
-    query, expected_result = data
+    query, expected_result = check_data_case(get_test_data(site_value, case))
 
     with allure.step("'Переходим на главную страницу."):
         page = MainPage(web_browser, site_value)
@@ -39,14 +34,10 @@ def test_check_main_search(case, web_browser, site_value):
 @pytest.mark.parametrize('case', (
         ('pay_product'),
 ))
-def test_put_in_cart(case, web_browser, site_value):
+def test_put_in_cart(case, web_browser, site_value, cookies_, check_data_case):
     """Добавляем один элемент в корзину."""
 
-    data = get_test_data(site_value, case)
-    if data is None:
-        pytest.xfail(reason='Кейса не существует, пропускаем')
-        assert False
-    url, expected_result = data
+    url, expected_result = check_data_case(get_test_data(site_value, case))
 
     with allure.step(f'Открываем страницу с товаром {site_value + url}.'):
         page = CartPage(web_browser, site_value, url=url)
@@ -61,28 +52,27 @@ def test_put_in_cart(case, web_browser, site_value):
         assert page.item_cart.count() == expected_result
 
     with allure.step('Записываем куку для следующего теста.'):
-        write_cookies(page.get_cookies())
+        cookies_(page.get_cookies())
 
 
 @allure.story('Тестирование корзины')
 @pytest.mark.smoke
 @pytest.mark.parametrize('case', (
-        ('view_cart'),
+        ('pay_product'),
 ))
-def test_view_in_cart(case, web_browser, site_value):
-    """Подкладываем куку и проверяем что есть 1 элемент в корзине."""
+def test_view_in_cart(case, web_browser, site_value, cookies_, check_data_case):
+    """Проверям что данные сохранились в сессии."""
 
-    data = get_test_data(site_value, case)
-    if data is None:
-        pytest.xfail(reason='Кейса не существует, пропускаем')
-        assert False
-    url, expected_result = data
+    url, expected_result = check_data_case(get_test_data(site_value, case))
 
-    with allure.step(f'Открываем страницу {site_value + url}.'):
-        page = CartPage(web_browser, site_value, url=url)
+    with allure.step(f'Открываем страницу {site_value}.'):
+        page = CartPage(web_browser, site_value)
 
-    with allure.step('Загружаем куку и обновляем страницу.'):
-        page.add_cookie(read_cookies(), refresh=True)
+    with allure.step('Загружаем куку от теста test_put_in_cart.'):
+        page.add_cookie(cookies_())
+
+    with allure.step('Нажимаем корзину.'):
+        page.cart.click()
 
     with allure.step(f'Сравниваем количество товаров в корзине, должно быть {expected_result}.'):
         assert page.item_cart.count() == expected_result
@@ -119,8 +109,8 @@ def test_open_catalog(web_browser, site_value):
 def test_main_elements(web_browser, site_value):
     """Наличие всех элементов на странице."""
 
-    important_elements = ['Relines', 'Каталог', 'Доставка', 'Контакты', '+7 (495) 266-65-67',
-                          'Оферта', 'Телеграм', 'Ватсап']
+    important_elements = ['Relines', 'Каталог', 'Доставка', 'Контакты',
+                          '+7 (495) 266-65-67', 'Оферта', 'Телеграм', 'Ватсап']
     count_important_elements = len(important_elements)
 
     with allure.step('Переходим на главную страницу.'):
@@ -143,15 +133,10 @@ def test_main_elements(web_browser, site_value):
 @pytest.mark.parametrize('case', (
         ('brands_model_vendor_1'),
 ))
-def test_search_brandart(case, web_browser, site_value):
+def test_search_brandart(case, web_browser, site_value, check_data_case):
     """Поиск по марке/модели и артикулу"""
 
-    data = get_test_data(site_value, case)
-    if data is None:
-        pytest.xfail(reason='Кейса не существует, пропускаем.')
-        assert False
-
-    _brand, _model, _vendor_code = data
+    _brand, _model, _vendor_code = check_data_case(get_test_data(site_value, case))
 
     with allure.step('Переходим на главную страницу.'):
         page = MainPage(web_browser, site_value)
