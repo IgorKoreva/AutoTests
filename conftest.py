@@ -7,6 +7,8 @@ import uuid
 
 from allure_commons.types import AttachmentType
 
+from pages.base import read_cookies, write_cookies
+
 
 def pytest_make_parametrize_id(config, val):
     """Для поддержки кириллицы в тестах."""
@@ -39,6 +41,26 @@ def pytest_runtest_makereport(item, call):
     rep = outcome.get_result()
     setattr(item, "rep_" + rep.when, rep)
     return rep
+
+
+@pytest.fixture
+def check_data_case():
+    def check(data):
+        if data is None:
+            pytest.xfail(reason='Кейса не существует, пропускаем')
+            assert False
+        return data
+    return check
+
+
+@pytest.fixture(scope='session')
+def cookies_():
+    def _make_cookies_record(cookie: list = []):
+        if cookie:
+            write_cookies(cookie)
+            return cookie
+        return read_cookies()
+    return _make_cookies_record
 
 
 @pytest.fixture
