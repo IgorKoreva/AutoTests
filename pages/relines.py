@@ -10,10 +10,22 @@ from pages.elements import ManyWebElements
 
 
 def read_test_data():
-    """Чтение файла"""
+    """Чтение файла."""
     with open('test_data.json', mode='r', encoding='utf-8') as f:
         return json.load(f)
     return {}
+
+
+def _get_elem_accessible_name(elements: ManyWebElements, name: str) -> WebElement:
+    for el in elements:
+        if name in el.accessible_name:
+            return el
+
+
+def _get_elem_text(elements: ManyWebElements, text: str) -> WebElement:
+    for el in elements:
+        if text in el.text:
+            return el
 
 
 SUIT_CASE = read_test_data()
@@ -39,6 +51,10 @@ class MainPage(WebPage):
     brands_menu_models = ManyWebElements(xpath='//*[@id="searchMenu"]/div/ul/li[*]/ul/li')
 
     car_brands = ManyWebElements(xpath='//a[@class="main-page-group__link"]')
+    car_models = ManyWebElements(xpath='//a[@class="category-page-car-model category-page-car-model_hover_active '
+                                       'category-page-car-model_focus_active category-page-car-models__category"]')
+    cat_dir = ManyWebElements(xpath='//a[@class="category-page-subcategories__section-link"]')
+    bread_crumbs = ManyWebElements(xpath='//a[@class="link breadcrumbs__link"]')
     brand_name_h1 = WebElement(xpath='//h1[@class="catalog-header__title"]')
     important_elements = ManyWebElements(xpath='//a[contains(@class, "link header-nav__link") or ' \
                                                'contains(@class, "header__logo") or ' \
@@ -59,3 +75,8 @@ class CartPage(WebPage):
     item_cart = ManyWebElements(xpath='//*[@id="root"]/section/section/div/main/ul/li/section/a')
     buy = WebElement(xpath='//button[@class="button button_big button_yellow product-info__button-buy"]')
     not_found = WebElement(xpath='//h5[@class="search-page-no-results__text-typography"]')
+    products_not_incart = ManyWebElements(xpath='//h2[@class="typography__root typography__body typography typography_color_primary product-list-item__name"]')
+    products_incart = ManyWebElements(xpath='//button[@class="button product-list-price-item product-list-price-item_border_dark product-list-prices__item"]')
+    add_product = ManyWebElements(xpath='//button[@class="button basket-product__increase-button"]')
+    del_product = ManyWebElements(xpath='//button[@class="button"]')
+    count_product = ManyWebElements(xpath='//p[@class="typography__root typography__body typography basket-product__quantity"]')

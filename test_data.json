@@ -1,8 +1,31 @@
 {
   "https://relines.ru/": {
-    "normal_search": ["Chery Fora Мотор стеклоочистителя", 2],
-    "bad_search": ["Chery Fora Мотор стеклооddsadsasdчистителя", 0],
-    "pay_product": ["product/bolt-hexagon-flange-emvrq", 1],
-    "brands_model_vendor_1": ["Great Wall", "Sailor", "2804200-B00"]
+    "normal_search": [
+      "Chery Fora Мотор стеклоочистителя",
+      2
+    ],
+    "bad_search": [
+      "Chery Fora Мотор стеклооddsadsasdчистителя",
+      0
+    ],
+    "pay_product": [
+      "product/bolt-hexagon-flange-emvrq",
+      1
+    ],
+    "brands_model_vendor_1": [
+      "Great Wall",
+      "Sailor",
+      "2804200-B00"
+    ]
+  },
+  "https://stg.relines.ru/": {
+    "normal_search": ["Chery Fora Мотор стеклоочистителя",2],
+    "bad_search": ["Chery Fora Мотор стеклооddsadsasdчистителя",0],
+    "pay_product": ["product/bolt-hexagon-flange-emvrq",1],
+    "brands_model_vendor_1": ["Great Wall","Sailor","2804200-B00"],
+    "breadcrumbs": ["Lifan","Cebrium",["Подкатегория \"Поколение I (2012)\"","Подкатегория \"Сцепление и механизм управления сцеплением\"","Сцепление","Сцепление"],
+      ["Сцепление и механизм управления сцеплением","Lifan"]],
+    "breadcrumbs1": ["Geely","MK Cross",["Двигатель","CAMSHAFT (EURO) (2)"],["Двигатель","Geely"]],
+    "add_del_cart": ["search?text=Great+Wall+Sailor+%D1%81%D1%82%D0%B5%D0%BA%D0%BB%D0%BE", ["Уплотнитель ветрового стекла верхний","Уплотнитель стекла двери передней левой (бархотка)"]]
   }
 }

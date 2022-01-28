@@ -1,8 +1,10 @@
 """Смок тесты."""
+import time
+
 import allure
 import pytest
 
-from pages.relines import MainPage, get_test_data, CartPage
+from pages.relines import MainPage, get_test_data, CartPage, _get_elem_accessible_name, _get_elem_text
 
 
 @allure.severity(allure.severity_level.BLOCKER)
@@ -62,6 +64,8 @@ def test_put_in_cart(case, web_browser, site_value, cookies_, check_data_case):
 ))
 def test_view_in_cart(case, web_browser, site_value, cookies_, check_data_case):
     """Проверям что данные сохранились в сессии."""
+    # todo 9. Убавляем оставшиеся товары
+    #  10. Проверяем, что в корзине пусто
 
     url, expected_result = check_data_case(get_test_data(site_value, case))
 
@@ -164,3 +168,87 @@ def test_search_brandart(case, web_browser, site_value, check_data_case):
     with allure.step('Проверяем что найдены детали.'):
         assert 'Ничего не найдено' not in page.not_found.get_text()
         assert page.products_list.count()
+
+
+@allure.severity(allure.severity_level.NORMAL)
+@allure.story('Каталог')
+@pytest.mark.smoke
+@pytest.mark.parametrize('case', (
+        ('breadcrumbs'),
+        ('breadcrumbs1'),
+))
+def test_breadcrumbs(case, check_data_case, web_browser, site_value):
+    """Переходы по хлебным крошкам."""
+
+    with allure.step('Переходим на главную страницу'):
+        page = MainPage(web_browser, site_value)
+
+    mark, model, cat, b_crumbs = check_data_case(get_test_data(site_value, case))
+
+
+    with allure.step(f'Нажимаем на "{mark}".'):
+        _get_elem_accessible_name(page.car_brands, mark).click()
+
+    with allure.step(f'Нажимаем на "{model}".'):
+        _get_elem_accessible_name(page.car_models, model).click()
+
+    for search in cat:
+        with allure.step(f'Нажимаем на "{search}".'):
+            _get_elem_accessible_name(page.cat_dir, search).click()
+            time.sleep(1)
+
+    for search in b_crumbs:
+        with allure.step(f'Нажимаем в хлебных крошках "{search}".'):
+            _get_elem_text(page.bread_crumbs, search).click()
+            time.sleep(0.5)
+            with allure.step(f'Проверяем что в заголовке страницы содержится "{search}".'):
+                assert search in page.get_title()
+            with allure.step(f'Проверяем, что в заголовке h1 содержится "{search}".'):
+                assert search in page.brand_name_h1.get_text()
+
+
+@allure.story('Тестирование корзины')
+@pytest.mark.UC
+@pytest.mark.parametrize('case', (
+        ('add_del_cart'),
+))
+def test_add_del_cart(case, check_data_case, web_browser, site_value):
+    """Добавляем один элемент в корзину."""
+
+    url, details = check_data_case(get_test_data(site_value, case))
+
+    with allure.step(f'Переходим в каталог с товаром {site_value + url}.'):
+        page = CartPage(web_browser, site_value, url=url)
+
+    for detail in details:
+        with allure.step(f'Нажимаем на деталь "{detail}".'):
+            _get_elem_text(page.products_not_incart, detail).click()
+        with allure.step(f'Нажимаем купить'):
+            page.buy.click()
+        with allure.step(f'Нажимаем назад'):
+            page.go_back()
+
+    with allure.step(f'Нажимаем корзину'):
+        page.cart.click()
+    count = 1
+    with allure.step(f'Добавляем 1 шт. к первому товару.'):
+        page.add_product[0].click()
+        count += 1
+        time.sleep(0.5)
+    with allure.step(f'Проверяем товар добавился'):
+        assert page.count_product[0].text == f'{count} шт.'
+
+    for element in [page.del_product, page.del_product]:
+        with allure.step(f'Убавляем 1 шт. у первого товара.'):
+            element[0].click()
+            count -= 1
+        if count > 0:
+            with allure.step(f'Проверяем товар убавился'):
+                time.sleep(0.5)
+                assert page.count_product[0].text == f'{count} шт.'
+        else:
+            with allure.step(f'Проверяем товар удалился из корзины, и в корзине остался 1 товар'):
+                time.sleep(0.5)
+                assert page.item_cart.count() < len(details)
+
+
