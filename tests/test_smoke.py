@@ -208,12 +208,12 @@ def test_breadcrumbs(case, check_data_case, web_browser, site_value):
 
 
 @allure.story('Тестирование корзины')
-@pytest.mark.UC
+@pytest.mark.smoke
 @pytest.mark.parametrize('case', (
         ('add_del_cart'),
 ))
 def test_add_del_cart(case, check_data_case, web_browser, site_value):
-    """Добавляем один элемент в корзину."""
+    """Добавляем и удаляем элементы из корзины."""
 
     url, details = check_data_case(get_test_data(site_value, case))
 
@@ -250,5 +250,63 @@ def test_add_del_cart(case, check_data_case, web_browser, site_value):
             with allure.step(f'Проверяем товар удалился из корзины, и в корзине остался 1 товар'):
                 time.sleep(0.5)
                 assert page.item_cart.count() < len(details)
+
+@allure.story('Тестирование сумм и количества товаров в корзине')
+@pytest.mark.smoke
+@pytest.mark.parametrize('case', (
+        ('sum_add_del_cart'),
+))
+def test_sum_add_del_cart(case, check_data_case, web_browser, site_value):
+    """Проверяем сумму и количество товара в корзине."""
+
+    url = check_data_case(get_test_data(site_value, case))
+
+    with allure.step(f'Переходим в каталог с товаром {site_value + url}.'):
+        page = CartPage(web_browser, site_value, url=url)
+    time.sleep(1)
+
+    with allure.step(f'Находим деталь Болт м6х14 и нажимаем "Ориг. $$$ Р". Одна деталь попадает в корзину.'):
+        page.bolt_orig.click()
+        time.sleep(1)
+
+    with allure.step(f'Извлекаем цену и количество деталей Болт м6х14, помещенных в корзину.'):
+        ceni = []
+        for price in page.boltprice:
+            ceni.append(price.text)
+        cena = int(ceni[0])
+
+        for qua in page.quantity:
+            kolich = int(qua.text)
+
+    with allure.step(f'Переходим к корзину. Клик по корзине.'):
+        page.cart.click()
+
+    with allure.step(f'Извлекаем сумму отображенную на товаре'):
+        prices_on_prodincart = []
+        for price_onprod in page.sum_on_prodincart:
+            prices_on_prodincart.append(price_onprod.text)
+        price_on_prodincart = int(prices_on_prodincart[0])
+
+    with allure.step(f'Извлекаем количество товара отображенное на товаре'):
+        for quan_onprod in page.quan_on_prodincart:
+            qu = (quan_onprod.text).split()
+        quantity_onprod = int(qu[0])
+
+    with allure.step(f'Извлекаем сумму, отображенную на желтой кнопке "Оформить заказ на $$$ Р"'):
+        prices_yellow = []
+        for price_y in page.sum_yellow_button:
+            prices_yellow.append(price_y.text)
+        price_yellow = int(prices_yellow[0])
+
+    with allure.step(f'Извлекаем сумму, отображенную на красной кнопке "Корзина"'):
+        prices_red = []
+        for price_r in page.sum_red_button:
+            prices_red.append(price_r.text)
+        price_red = int(prices_red[0])
+
+    with allure.step(f'Проверяем, что сумма везде одинаковая = {cena} Р'):
+        assert cena*kolich == price_yellow == price_red == price_on_prodincart
+
+
 
 

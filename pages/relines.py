@@ -75,8 +75,29 @@ class CartPage(WebPage):
     item_cart = ManyWebElements(xpath='//*[@id="root"]/section/section/div/main/ul/li/section/a')
     buy = WebElement(xpath='//button[@class="button button_big button_yellow product-info__button-buy"]')
     not_found = WebElement(xpath='//h5[@class="search-page-no-results__text-typography"]')
-    products_not_incart = ManyWebElements(xpath='//h2[@class="typography__root typography__body typography typography_color_primary product-list-item__name"]')
-    products_incart = ManyWebElements(xpath='//button[@class="button product-list-price-item product-list-price-item_border_dark product-list-prices__item"]')
+    products_not_incart = ManyWebElements(xpath='//h2[@class="typography__root typography__body typography '
+                                                'typography_color_primary product-list-item__name"]')
+    products_incart = ManyWebElements(xpath='//button[@class="button product-list-price-item '
+                                            'product-list-price-item_border_dark product-list-prices__item"]')
     add_product = ManyWebElements(xpath='//button[@class="button basket-product__increase-button"]')
     del_product = ManyWebElements(xpath='//button[@class="button"]')
-    count_product = ManyWebElements(xpath='//p[@class="typography__root typography__body typography basket-product__quantity"]')
+    count_product = ManyWebElements(xpath='//p[@class="typography__root typography__body typography '
+                                          'basket-product__quantity"]')
+    # Кнопка "Ориг." - добавляет деталь в корзину
+    bolt_orig = WebElement(xpath='//a[@href="/product/bolt-m6kh14-mpng"]//*[contains(text(), "Ориг.")]')
+    # цена, указанная за деталь в каталоге "Ориг." тут "181 Р"
+    boltprice = ManyWebElements(xpath='//a[@href="/product/bolt-m6kh14-mpng"]//span[@class="currency-label"]//span')
+    # количество деталей отображенных в красном кружке в каталоге
+    quantity = ManyWebElements(xpath='//a[@href="/product/bolt-m6kh14-mpng"]//div[@class="badge '
+                                     'product-list-price-item__badge"]')
+    # Сумма на желтой кнопке "Оформить заказ" в корзине
+    sum_yellow_button = ManyWebElements(xpath='//*[text()="Оформить заказ на "]//span[@class="currency-label"]//span')
+    # Сумма на товаре в корзине
+    sum_on_prodincart = ManyWebElements(xpath='//*[text()="Болт м6х14"]/../../..//span[@class="currency-label"]//span')
+    # Количество товара на товаре в корзине
+    quan_on_prodincart = ManyWebElements(xpath='//*[text()="Болт м6х14"]/../../..//p[@class="typography__root '
+                                               'typography__body typography basket-product__quantity"]')
+    # Сумма на красной кнопке "Корзина"
+    sum_red_button = ManyWebElements(xpath='//span[@class="currency-label basket-link-btn__price"]//span')
+
+
